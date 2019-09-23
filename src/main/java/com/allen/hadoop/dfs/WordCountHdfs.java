@@ -47,9 +47,9 @@ public class WordCountHdfs {
         Properties properties = System.getProperties();
         properties.setProperty("HADOOP_USER_NAME", "root");
 
-        String outputPath="/output55";
+        String outputPath="/output/";
         // 指定HDFS路径的方法一
-        conf.set("fs.defaultFS", "hdfs://172.20.0.2:9000");
+        conf.set("fs.defaultFS", "hdfs://172.18.0.2:9000");
 
         Job job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCountHdfs.class);
@@ -61,19 +61,22 @@ public class WordCountHdfs {
         // for (int i = 0; i < otherArgs.length - 1; ++i) {
         FileInputFormat.addInputPath(job, new Path("/data"));
         // }
-
-        FileOutputFormat.setOutputPath(job, new Path(outputPath));
-        job.waitForCompletion(true);
-
         FileSystem fileSystem = FileSystem.get(conf);
-
         if(fileSystem.exists(new Path(outputPath)))
         {
             fileSystem.delete(new Path(outputPath), true);
         }
 
+
+        FileOutputFormat.setOutputPath(job, new Path(outputPath));
+        job.waitForCompletion(true);
+
+
+
+
+
         //查看程序的运行结果
-        FSDataInputStream fr = fileSystem.open(new Path(outputPath));
+        FSDataInputStream fr = fileSystem.open(new Path(outputPath+"part-r-00000"));
         IOUtils.copyBytes(fr,System.out,1024,true);
 
     }
