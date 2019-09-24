@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class SparkJoinTest {
     public static void main(String[] args){
-        SparkConf conf = new SparkConf().setAppName("SparkRDD").setMaster("local");
+        SparkConf conf = new SparkConf().setAppName("SparkRDD").setMaster("spark://ubuntu:7077");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         List<Integer> data = Arrays.asList(1,2,3,4,5);
@@ -50,7 +50,6 @@ public class SparkJoinTest {
         System.out.println("print second rdd");
         print(secondRDD);
 
-        //join: 如果有相同的key，则value 合并
         JavaPairRDD<Integer, Tuple2<Integer, String>> joinRDD = firstRDD.join(secondRDD);
 
         System.out.println("print join rdd");
